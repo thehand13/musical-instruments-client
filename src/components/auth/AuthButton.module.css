@@ -1,0 +1,12 @@
+.auth-button {
+  background-color: white;
+  color: #1a8ed1;
+  border: 1px solid #1a8ed1;
+}
+
+.auth-button:hover,
+.auth-button:active {
+  background-color: #1a8ed1;
+  border-color: #1a8ed1;
+  color: white;
+}

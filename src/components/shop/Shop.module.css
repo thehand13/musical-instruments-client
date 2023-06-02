@@ -1,0 +1,11 @@
+.shop h2 {
+  color: white;
+  margin: 2rem auto;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.shop ul {
+  margin: 0;
+  padding: 0;
+}
