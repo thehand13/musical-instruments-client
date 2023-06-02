@@ -25,6 +25,12 @@ const ShopListItem: React.FC<{ item: ShopItem }> = (props) => {
           <div className={classes.price}>${props.item.price.toFixed(2)}</div>
         </header>
         <p>{props.item.description}</p>
+        <img
+          src={`${process.env.REACT_APP_BACKEND_URL}/${props.item.image}`}
+          alt={props.item.title}
+          className={classes.image}
+          loading="lazy"
+        />
         <div className={classes.actions}>
           <button onClick={addToCartHandler}>Add to Cart</button>
         </div>

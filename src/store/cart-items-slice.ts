@@ -7,7 +7,7 @@ import {
 
 export interface CartItem {
   title: string;
-  id: string;
+  id: number;
   price: number;
   quantity: number;
   totalPrice: number;
@@ -72,7 +72,7 @@ export const cartItemsSlice = createSlice({
       state,
       action: PayloadAction<{
         title: string;
-        id: string;
+        id: number;
         price: number;
       }>
     ) {
@@ -93,7 +93,7 @@ export const cartItemsSlice = createSlice({
       state.totalQuantity++;
       state.itemsWereChanged = !state.itemsWereChanged;
     },
-    removeCartItem(state, action: PayloadAction<string>) {
+    removeCartItem(state, action: PayloadAction<number>) {
       const id = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
       if (existingItem) {

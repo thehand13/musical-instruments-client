@@ -6,10 +6,13 @@ import {
 } from '@reduxjs/toolkit';
 
 export interface ShopItem {
+  id: number;
   title: string;
-  price: number;
   description: string;
-  id: string;
+  price: number;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface ShopItemsState {
@@ -32,7 +35,7 @@ export const fetchShopItems = createAsyncThunk<
   { rejectValue: string }
 >('shop/fetchShopItems', async function (_, { rejectWithValue }) {
   const response = await fetch(
-    'https://react-ts-demo-shop-default-rtdb.europe-west1.firebasedatabase.app/shop-items.json'
+    `${process.env.REACT_APP_BACKEND_URL}/api/products`
   );
   if (!response.ok) {
     return rejectWithValue('Server Error!');
@@ -53,7 +56,7 @@ export const addShopItem = createAsyncThunk<
   { rejectValue: string }
 >('shop/addShopItem', async function (item, { rejectWithValue }) {
   const response = await fetch(
-    `https://react-ts-demo-shop-default-rtdb.europe-west1.firebasedatabase.app/shop-items.json`,
+    `${process.env.REACT_APP_BACKEND_URL}/api/products`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -70,13 +73,13 @@ export const addShopItem = createAsyncThunk<
 
 export const removeShopItem = createAsyncThunk<
   string,
-  { id: string; authToken: string },
+  { id: number; authToken: string },
   { rejectValue: string }
 >(
   'shop/removeShopItem',
   async function ({ id, authToken }, { rejectWithValue }) {
     const response = await fetch(
-      `https://react-ts-demo-shop-default-rtdb.europe-west1.firebasedatabase.app/shop-items/${id}.json`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/products/${id}`,
       {
         method: 'DELETE',
       }
@@ -106,12 +109,9 @@ export const shopItemsSlice = createSlice({
         state.error = null;
         const itemsArray: ShopItem[] = [];
         if (action.payload) {
-          for (let [key, value] of Object.entries(action.payload)) {
+          for (let [, value] of Object.entries(action.payload)) {
             itemsArray.push({
-              title: value.title,
-              price: value.price,
-              description: value.description,
-              id: key,
+              ...value,
             });
           }
           state.items = itemsArray;

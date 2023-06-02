@@ -25,3 +25,7 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.image {
+  width: 300px;
+}
