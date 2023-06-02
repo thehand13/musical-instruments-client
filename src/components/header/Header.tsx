@@ -11,7 +11,7 @@ const Header: React.FC = () => {
 
   return (
     <header className={classes.header}>
-      <h1>React Test Shop</h1>
+      <h1>Music Center</h1>
       <nav>
         <Link to="/">
           <button>Shop</button>
