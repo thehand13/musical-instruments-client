@@ -1,9 +1,4 @@
-import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk,
-  AnyAction,
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CartItem {
   productId: number;
@@ -75,14 +70,11 @@ export const cartItemsSlice = createSlice({
       }
     },
     clearCartItems(state) {
-      state = initialState;
+      state.items = [];
     },
   },
 });
 
-export const { addCartItem, removeCartItem } = cartItemsSlice.actions;
+export const { addCartItem, removeCartItem, clearCartItems } =
+  cartItemsSlice.actions;
 export const cartItemsReducer = cartItemsSlice.reducer;
-
-function isError(action: AnyAction) {
-  return action.type.endsWith('rejected');
-}
