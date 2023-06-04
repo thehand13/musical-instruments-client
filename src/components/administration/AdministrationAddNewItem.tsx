@@ -33,7 +33,6 @@ const AdministrationAddNewItem: React.FC = () => {
           title: titleState,
           price: +priceState,
           description: descriptionState,
-          authToken: authState.idToken,
         })
       );
       setTitleState('');

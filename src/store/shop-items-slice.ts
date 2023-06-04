@@ -51,7 +51,6 @@ export const addShopItem = createAsyncThunk<
     title: string;
     price: number;
     description: string;
-    authToken: string;
   },
   { rejectValue: string }
 >('shop/addShopItem', async function (item, { rejectWithValue }) {
@@ -73,26 +72,23 @@ export const addShopItem = createAsyncThunk<
 
 export const removeShopItem = createAsyncThunk<
   string,
-  { id: number; authToken: string },
+  { id: number },
   { rejectValue: string }
->(
-  'shop/removeShopItem',
-  async function ({ id, authToken }, { rejectWithValue }) {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/api/products/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
-
-    if (!response.ok) {
-      return rejectWithValue('Can`t remove item from the shop');
+>('shop/removeShopItem', async function ({ id }, { rejectWithValue }) {
+  const response = await fetch(
+    `${process.env.REACT_APP_BACKEND_URL}/api/products/${id}`,
+    {
+      method: 'DELETE',
     }
+  );
 
-    const responseData = await response.json();
-    return responseData;
+  if (!response.ok) {
+    return rejectWithValue('Can`t remove item from the shop');
   }
-);
+
+  const responseData = await response.json();
+  return responseData;
+});
 
 export const shopItemsSlice = createSlice({
   name: 'shop',

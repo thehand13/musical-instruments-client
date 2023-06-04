@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
-import { useAppDispatch } from '../../hooks/react-redux-hooks';
-import { loginUser } from '../../store/auth-slice';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/react-redux-hooks';
 import { hideLoginModal } from '../../store/ui-slice';
 import Card from '../UI/Card';
 import Modal from '../UI/Modal';
 
 import classes from './LoginModal.module.css';
+import {
+  clearAuthMessage,
+  fetchUserInfo,
+  signIn,
+  signUp,
+} from '../../store/auth-slice';
 
 const LoginModal: React.FC = () => {
   const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state.auth);
 
   const [isLogin, setIsLogin] = useState(true);
+  const [nameState, setNameState] = useState('');
+  const [surnameState, setSurnameState] = useState('');
   const [emailState, setEmailState] = useState('');
   const [passwordState, setPasswordState] = useState('');
 
@@ -18,6 +26,12 @@ const LoginModal: React.FC = () => {
     setIsLogin((prevState) => !prevState);
   };
 
+  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNameState(event.target.value);
+  };
+  const onSurnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSurnameState(event.target.value);
+  };
   const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailState(event.target.value);
   };
@@ -27,66 +41,62 @@ const LoginModal: React.FC = () => {
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let authUrl;
 
     if (isLogin) {
-      authUrl =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA4ufg4-Af6TL_4mnvfLQ0e8v8b8YYFNG8';
+      dispatch(signIn({ email: emailState, password: passwordState }));
     } else {
-      authUrl =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA4ufg4-Af6TL_4mnvfLQ0e8v8b8YYFNG8';
+      dispatch(
+        signUp({
+          email: emailState,
+          password: passwordState,
+          name: nameState,
+          surname: surnameState,
+        })
+      );
+      setNameState(() => '');
+      setSurnameState(() => '');
+      setEmailState(() => '');
+      setPasswordState(() => '');
     }
-    fetch(authUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        email: emailState,
-        password: passwordState,
-        returnSecureToken: true,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((responseValue) => {
-        if (responseValue.ok) {
-          return responseValue.json();
-        } else {
-          return responseValue.json().then((responseData) => {
-            let errorMessage = 'Registration Failed';
-            if (
-              responseData &&
-              responseData.error &&
-              responseData.error.message
-            ) {
-              errorMessage = responseData.error.message;
-            }
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .then((responseData) => {
-        dispatch(
-          loginUser({
-            fetchedAuthToken: responseData.idToken,
-            fetchedLocalId: responseData.localId,
-            fetchedEmail: emailState,
-          })
-        );
-        setEmailState('');
-        setPasswordState('');
-        setIsLogin(true);
-        dispatch(hideLoginModal());
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
   };
-
+  useEffect(() => {
+    if (authState.loggedIn) {
+      dispatch(fetchUserInfo());
+      dispatchHideLoginModal();
+    }
+  }, [authState.loggedIn]);
   const dispatchHideLoginModal = dispatch.bind(null, hideLoginModal());
+
+  useEffect(() => {
+    dispatch(clearAuthMessage());
+  }, [isLogin]);
 
   return (
     <Modal closeModalFunc={dispatchHideLoginModal}>
       <Card>
         <h2>{isLogin ? 'Log In' : 'Create new account'}</h2>
+        {authState.message && (
+          <p className={classes['auth-message']}>{authState.message}</p>
+        )}
         <form className={classes['login-form']} onSubmit={submitHandler}>
+          {!isLogin && (
+            <>
+              <label htmlFor="Name">Name</label>
+              <input
+                onChange={onNameChange}
+                required
+                type="text"
+                value={nameState}
+              />
+              <label htmlFor="Surname">Surname</label>
+              <input
+                onChange={onSurnameChange}
+                required
+                type="text"
+                value={surnameState}
+              />
+            </>
+          )}
           <label htmlFor="E-mail">E-mail</label>
           <input
             onChange={onEmailChange}

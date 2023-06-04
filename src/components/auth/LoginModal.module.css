@@ -1,3 +1,7 @@
+.auth-message {
+  text-align: center;
+}
+
 .login-form {
   margin: 1rem 0;
   display: flex;

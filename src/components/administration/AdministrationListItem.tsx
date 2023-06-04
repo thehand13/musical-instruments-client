@@ -11,9 +11,7 @@ const AdministrationListItem: React.FC<{ item: ShopItem }> = (props) => {
   const authState = useAppSelector((state) => state.auth);
 
   const deleteHandler = () => {
-    dispatch(
-      removeShopItem({ id: props.item.id, authToken: authState.authToken })
-    );
+    dispatch(removeShopItem({ id: props.item.id }));
   };
   return (
     <li className={classes.item}>

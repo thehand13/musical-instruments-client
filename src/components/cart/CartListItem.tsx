@@ -15,7 +15,7 @@ const CartListItem: React.FC<{ item: CartItem }> = (props) => {
     dispatch(
       addCartItem({
         title: props.item.title,
-        id: props.item.id,
+        id: +props.item.id,
         price: props.item.price,
       })
     );

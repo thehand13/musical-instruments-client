@@ -7,21 +7,20 @@ import About from './components/about/About';
 import NotFound from './components/not-found/NotFound';
 import MainLayout from './layouts/MainLayout';
 import { useAppSelector, useAppDispatch } from './hooks/react-redux-hooks';
-import { fetchCartItems, pushCartItems } from './store/cart-items-slice';
+// import { fetchCartItems, pushCartItems } from './store/cart-items-slice';
 import LoginModal from './components/auth/LoginModal';
+import cookie from 'cookiejs';
+import { fetchUserInfo } from './store/auth-slice';
 
 function App() {
   const dispatch = useAppDispatch();
   const uiState = useAppSelector((state) => state.ui);
   const authState = useAppSelector((state) => state.auth);
-  const cartState = useAppSelector((state) => state.cart);
   useEffect(() => {
-    if (cartState.firstLoad) {
-      dispatch(fetchCartItems());
-    } else {
-      dispatch(pushCartItems(cartState.items));
+    if (cookie.get('accessToken')) {
+      dispatch(fetchUserInfo());
     }
-  }, [dispatch, cartState.itemsWereChanged]);
+  }, [dispatch]);
   return (
     <>
       {uiState.loginModalisShown && <LoginModal />}
