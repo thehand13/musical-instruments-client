@@ -10,11 +10,7 @@ const ShopListItem: React.FC<{ item: ShopItem }> = (props) => {
 
   const addToCartHandler = () => {
     dispatch(
-      addCartItem({
-        title: props.item.title,
-        id: props.item.id,
-        price: props.item.price,
-      })
+      addCartItem({ productId: props.item.id, productPrice: props.item.price })
     );
   };
   return (

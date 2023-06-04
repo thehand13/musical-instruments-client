@@ -15,7 +15,7 @@ const CartList: React.FC = () => {
       )}
       <ul className={classes['']}>
         {cartState.items.map((item) => (
-          <CartListItem key={item.id} item={item} />
+          <CartListItem key={item.productId} item={item} />
         ))}
       </ul>
     </>

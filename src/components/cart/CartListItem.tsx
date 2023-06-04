@@ -1,5 +1,5 @@
-import React from 'react';
-import { useAppDispatch } from '../../hooks/react-redux-hooks';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/react-redux-hooks';
 import {
   addCartItem,
   CartItem,
@@ -7,37 +7,72 @@ import {
 } from '../../store/cart-items-slice';
 import Card from '../UI/Card';
 import classes from './CartListItem.module.css';
+import { ShopItem } from '../../store/shop-items-slice';
+
+const initShopItem: ShopItem = {
+  id: 0,
+  title: '',
+  description: '',
+  price: 0,
+  image: '',
+  createdAt: '',
+  updatedAt: '',
+};
 
 const CartListItem: React.FC<{ item: CartItem }> = (props) => {
   const dispatch = useAppDispatch();
+  const cartState = useAppSelector((state) => state.cart);
+  const [shopItemState, setShopItemState] = useState<ShopItem>(initShopItem);
 
   const addCartItemHandler = () => {
     dispatch(
       addCartItem({
-        title: props.item.title,
-        id: +props.item.id,
-        price: props.item.price,
+        productId: props.item.productId,
+        productPrice: props.item.productPrice,
       })
     );
   };
   const removeCartItemHandler = () => {
-    dispatch(removeCartItem(props.item.id));
+    dispatch(
+      removeCartItem({
+        productId: props.item.productId,
+        productPrice: props.item.productPrice,
+      })
+    );
   };
+
+  useEffect(() => {
+    fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/api/products/${props.item.productId}`,
+      {
+        method: 'GET',
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        setShopItemState(responseData);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  }, [dispatch, props.item.productId]);
   return (
     <li className={classes.item}>
       <Card>
         <header>
-          <h3>{props.item.title}</h3>
+          <h3>{shopItemState?.title}</h3>
           <div className={classes.price}>
-            ${(props.item.price * props.item.quantity).toFixed(2)}{' '}
+            ${(shopItemState.price * props.item.productQuantity).toFixed(2)}{' '}
             <span className={classes.itemprice}>
-              (${props.item.price.toFixed(2)}/item)
+              (${shopItemState.price.toFixed(2)}/item)
             </span>
           </div>
         </header>
         <div className={classes.details}>
           <div className={classes.quantity}>
-            x <span>{props.item.quantity}</span>
+            x <span>{props.item.productQuantity}</span>
           </div>
           <div className={classes.actions}>
             <button onClick={removeCartItemHandler}>-</button>
