@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import classes from './ViewOrders.module.css';
 import Card from '../UI/Card';
 import { useAppDispatch, useAppSelector } from '../../hooks/react-redux-hooks';
-import { fetchOrders } from '../../store/orders-slice';
+import { fetchUserOrders } from '../../store/orders-slice';
 import ViewOrder from './ViewOrder';
 
 const ViewOrders = () => {
@@ -10,7 +10,7 @@ const ViewOrders = () => {
   const ordersState = useAppSelector((state) => state.orders);
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    dispatch(fetchUserOrders());
   }, [dispatch, ordersState.itemsWereChanged]);
   return (
     <section className={classes.viewOrders}>

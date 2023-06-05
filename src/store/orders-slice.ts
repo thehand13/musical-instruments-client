@@ -36,11 +36,11 @@ const initialState: OrdersState = {
   itemsWereChanged: false,
 };
 
-export const fetchOrders = createAsyncThunk<
+export const fetchUserOrders = createAsyncThunk<
   any,
   undefined,
   { rejectValue: string }
->('orders/fetchOrders', async function (_, { rejectWithValue }) {
+>('orders/fetchUserOrders', async function (_, { rejectWithValue }) {
   const response = await fetch(
     `${process.env.REACT_APP_BACKEND_URL}/api/orders`,
     {
@@ -82,11 +82,11 @@ export const ordersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
+      .addCase(fetchUserOrders.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.items = structuredClone(action.payload);
