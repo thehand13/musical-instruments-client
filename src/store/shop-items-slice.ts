@@ -47,19 +47,15 @@ export const fetchShopItems = createAsyncThunk<
 
 export const addShopItem = createAsyncThunk<
   { name: string },
-  {
-    title: string;
-    price: number;
-    description: string;
-  },
+  FormData,
   { rejectValue: string }
 >('shop/addShopItem', async function (item, { rejectWithValue }) {
   const response = await fetch(
     `${process.env.REACT_APP_BACKEND_URL}/api/products`,
     {
+      credentials: 'include',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(item),
+      body: item,
     }
   );
   if (!response.ok) {
@@ -72,12 +68,13 @@ export const addShopItem = createAsyncThunk<
 
 export const removeShopItem = createAsyncThunk<
   string,
-  { id: number },
+  number,
   { rejectValue: string }
->('shop/removeShopItem', async function ({ id }, { rejectWithValue }) {
+>('shop/removeShopItem', async function (id, { rejectWithValue }) {
   const response = await fetch(
     `${process.env.REACT_APP_BACKEND_URL}/api/products/${id}`,
     {
+      credentials: 'include',
       method: 'DELETE',
     }
   );
@@ -131,7 +128,6 @@ export const shopItemsSlice = createSlice({
         state.itemsWereChanged = true;
         state.loading = false;
         state.error = null;
-        console.log(action.payload);
       })
       .addMatcher(isError, (state, action: PayloadAction<string>) => {
         state.loading = false;

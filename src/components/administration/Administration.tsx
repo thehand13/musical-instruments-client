@@ -14,7 +14,6 @@ const Administration: React.FC = () => {
     dispatch(fetchShopItems());
   }, [dispatch, shopState.itemsWereChanged]);
 
-  const logoutHandler = () => {};
   return (
     <section className={classes.admin}>
       <Card>

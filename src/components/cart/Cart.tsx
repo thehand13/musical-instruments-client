@@ -40,7 +40,6 @@ const Cart: React.FC = () => {
         return response.json();
       })
       .then((responseData) => {
-        console.log(responseData);
         dispatch(clearCartItems());
         setDateState(() => '');
         setAddressState(() => '');
