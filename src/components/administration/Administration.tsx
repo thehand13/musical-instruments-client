@@ -7,9 +7,9 @@ import Card from '../UI/Card';
 import classes from './Administration.module.css';
 
 const Administration: React.FC = () => {
+  const dispatch = useAppDispatch();
   const shopState = useAppSelector((state) => state.shop);
 
-  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchShopItems());
   }, [dispatch, shopState.itemsWereChanged]);

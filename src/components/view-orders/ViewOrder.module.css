@@ -1,0 +1,16 @@
+.order {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(100, 100, 100);
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 7px;
+}
+
+.orderBlock {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap;
+}

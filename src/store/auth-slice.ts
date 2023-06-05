@@ -28,7 +28,7 @@ interface IUserInfo {
   roles: IRoleInfo[];
 }
 
-interface AuthState {
+interface IAuthState {
   email: string | null;
   name: string | null;
   surname: string | null;
@@ -39,7 +39,7 @@ interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = {
+const initialState: IAuthState = {
   email: null,
   name: null,
   surname: null,
