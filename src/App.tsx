@@ -7,10 +7,11 @@ import About from './components/about/About';
 import NotFound from './components/not-found/NotFound';
 import MainLayout from './layouts/MainLayout';
 import { useAppSelector, useAppDispatch } from './hooks/react-redux-hooks';
-// import { fetchCartItems, pushCartItems } from './store/cart-items-slice';
 import LoginModal from './components/auth/LoginModal';
 import cookie from 'cookiejs';
 import { fetchUserInfo } from './store/auth-slice';
+import ViewOrders from './components/view-orders/ViewOrders';
+import MyProfile from './components/my-profile/MyProfile';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -30,8 +31,16 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
+          {authState.loggedIn && (
+            <>
+              <Route path="/my-profile" element={<MyProfile />} />
+            </>
+          )}
           {authState.isAdmin && (
-            <Route path="/admin" element={<Administration />} />
+            <>
+              <Route path="/admin" element={<Administration />} />
+              <Route path="/view-orders" element={<ViewOrders />} />
+            </>
           )}
         </Route>
       </Routes>

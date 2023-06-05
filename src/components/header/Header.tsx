@@ -27,10 +27,20 @@ const Header: React.FC = () => {
         <Link to="/about">
           <button>About</button>
         </Link>
-        {authState.isAdmin && (
-          <Link to="/admin">
-            <button>Administration</button>
+        {authState.loggedIn && (
+          <Link to="/my-profile">
+            <button>My Profile</button>
           </Link>
+        )}
+        {authState.isAdmin && (
+          <>
+            <Link to="/admin">
+              <button>Administration</button>
+            </Link>
+            <Link to="/view-orders">
+              <button>View Orders</button>
+            </Link>
+          </>
         )}
       </nav>
       <nav>
